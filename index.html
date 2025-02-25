@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog 1 - Farid Ardiansyah</title>
+    <style>
+        /* Gaya CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            line-height: 1.6;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .navbar .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 50%;
+        }
+        .navbar .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 15s linear infinite;
+            background-color: #ff0000;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .navbar .status {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            gap: 10px;
+            margin-right: 40px;
+        }
+        .navbar .status .dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            animation: blink 1.4s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .container {
+            padding: 80px 20px 20px;
+        }
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        .hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            font-size: 18px;
+        }
+        .footer .left {
+            font-weight: bold;
+            margin-left: 20px;
+        }
+        .footer .right a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        .footer .right a:hover {
+            text-decoration: underline;
+        }
+        .blog-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .blog-post {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .blog-post img {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .blog-post .details {
+            flex: 1;
+        }
+        .blog-post .details h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .blog-post .details p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .blog-post .details .tags {
+            display: flex;
+            gap: 10px;
+        }
+        .blog-post .details .tags span {
+            background-color: #00ffcc;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .blog-post .details .tags span:hover {
+            background-color: #00ccaa;
+        }
+        .notice {
+            background-color: transparent;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .notice a {
+            color: #00ffcc;
+            text-decoration: none;
+        }
+        .notice a:hover {
+            text-decoration: underline;
+        }
+        .ad-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #00ffcc;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .new-label {
+            background-color: #ff0000;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-left: 10px;
+            display: inline-block;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .by-author {
+            background-color: #1d4ed8;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .by-author a {
+            color: white;
+            text-decoration: none;
+        }
+        .by-author a:hover {
+            text-decoration: underline;
+        }
+        .highlight-section {
+            background-color: #1e1e1e;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 2px solid #00ffcc;
+        }
+        .highlight-section h2 {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .highlight-posts {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .highlight-card {
+            background-color: #2e2e2e;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 200px;
+            flex: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .highlight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .highlight-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .highlight-card h3 {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #ffffff;
+        }
+        .highlight-card p {
+            font-size: 14px;
+            color: #cccccc;
+            margin: 5px 0;
+        }
+        .highlight-card .tags {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .highlight-card .tags span {
+            background-color: #ffffff;
+            color: black;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .highlight-card .tags span:hover {
+            background-color: #00ffcc;
+            color: black;
+        }
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #cccccc;
+        }
+        .post-meta .author {
+            font-weight: bold;
+        }
+        .post-meta .date {
+            font-style: italic;
+        }
+        .tags-above-title {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .tags-above-title span {
+            background-color: #00ffcc;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .tags-above-title span:hover {
+            background-color: #00ccaa;
+        }
+		
+		   /* Catatan Kaki */
+        .footer-notes {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-notes .note-text {
+            font-size: 20px;
+            color: #333;
+        }
+        .footer-notes .blinking-dots {
+            display: flex;
+            gap: 5px;
+        }
+		
+		.footer-notes .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #007BFF;
+            border-radius: 50%;
+            animation: blink 1s infinite alternate;
+        }
+        .footer-notes .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        .footer-notes .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        /* Animasi Blinking Dots */
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.2;
+            }
+        }
+/* Styling untuk kontainer pencarian */
+        .search-container {
+            text-align: center;
+            position: relative;
+        }
+
+        /* Styling untuk input pencarian */
+        .search-box {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007BFF;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+		  .search-box:focus {
+            border-color: #FF5733;
+        }
+
+        /* Styling untuk blok warna di bawah input */
+        .color-block {
+            height: 5px;
+            background: linear-gradient(90deg, #FF5733, #007BFF, #33FF57);
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        /* Styling untuk blinking dots */
+        .blinking-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+		        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #007BFF;
+            border-radius: 50%;
+            margin: 0 5px;
+            animation: blink 1.5s infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        /* Animasi blinking dots */
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+		/* Pesan hasil pencarian */
+        .search-result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .tag-link {
+    background-color: #fff;
+    color: #000;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.tag-link:hover {
+    background-color: #e63946;
+    color: #fff;
+}
+
+ textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #ffffff;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .comment {
+            background-color: #transparent;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .comment .author {
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .replies {
+            margin-left: 20px;
+            padding-left: 10px;
+            border-left: 2px solid #555;
+        }
+		
+		
+		
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="brand">
+            <h1>BLOG</h1>
+            <span class="by-author">
+                by <a href="https://www.instagram.com/fardardinsyh">@fardardinsyh</a>
+            </span>
+        </div>
+        <div class="marquee">
+            <span>Blog | <a href="utamablog1.html" style="color: white; text-decoration: none;">Kembali ke Beranda</a></span>
+        </div>
+        <div class="status">
+            Bersedia
+            <div class="dots">
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content">
+            <!-- Notice Pengumuman -->
+            <div class="notice">
+                <p>📢 Pengumuman: Jangan lupa baca postingan terbaru! <a href="utamablog1.html">Kembali ke Beranda</a>.</p>
+            </div>
+			
+	<div class="search-container">
+    <!-- Kolom Pencarian -->
+    <input type="text" class="search-box" id="searchInput" placeholder="Cari kata atau kalimat...">
+    <!-- Blok Warna -->
+    <div class="color-block"></div>
+    <!-- Hasil Pencarian -->
+    <div class="search-result" id="searchResult"></div>
+</div>
+
+<div class="blog-tags">
+    <a href="utamablog1.html?tag=Kenalan" class="tag-link">Kenalan</a>
+    <a href="utamablog1.html?tag=SiapaSaya" class="tag-link">Siapa Saya?</a>
+</div>
+
+            <!-- Author dan Jam Postingan -->
+            <div class="post-meta">
+                <span class="author">Farid Ardiansyah</span>
+                <span class="date">13 Januari 2024, 21:00 WIB</span>
+            </div>
+
+            <!-- Judul Blog -->
+            <h1>Farid Ardiansyah<span class="new-label">New</span></h1>
+
+            <!-- Gambar Blog -->
+            <img src="https://via.placeholder.com/800x400" alt="Gambar Blog 1" style="width: 100%; border-radius: 10px;">
+
+            <!-- Isi Blog -->
+            <p>
+                Memperkenalkan, nama saya Farid Ardiansyah.
+                Halo semua! saya Farid Ardiansyah, lulusan dari Universitas Gunadarma jurusan Sistem Komputer. Setelah perjalanan panjang penuh tantangan, akhirnya saya berhasil menyelesaikan studi dan siap memulai petualangan baru di dunia kerja!
+            </p>
+            <p>
+                Selama kuliah, saya aktif di UKM Fajrul Islam UG Depok 2021 - 2022, yang membuat saya semakin berkembang dalam kepemimpinan, design, tanggung jawab, inisiatif, kerjasama tim dan lain - lain. saya juga punya ketertarikan di bidang Arduino, Ilmu Pengetahuan, Ilmu Teknologi, Design illustrator dan lain - lain, dan ingin terus belajar serta berkontribusi di industri ini.
+            </p>
+			 <p> 
+            <p>
+                Saat ini, saya sedang mencari peluang untuk berkarier di bidang apapun asalkan halal dan baik, di mana saya bisa mengasah kemampuan dan memberikan dampak positif. Jika ada kesempatan atau sekadar ingin berbagi pengalaman, jangan ragu untuk terhubung dengan saya! 😊
+            </p>
+			 <p> Saya berusaha untuk melakukan investasi 1. Invest Pola Pikir 2. Invest Penampilan 3. Invest Skills 4. Invest Lingkungan 5. Invest Kesehatan 6. Invest Keuangan 7. Invest Pengetahuan / Ilmu 8. Invest Bahasa Asing </p>
+            <p>
+                Sertifikat Gunadarma atas nama Farid Ardiansyah: <a href="https://e-sert.gunadarma.ac.id/search?keywords=22119274" target="_blank" style="color: #FFFFFF;">Kunjungi situs ini</a>.
+            </p>
+        </div>
+    </div>
+	
+	 <h2>Forum Komentar</h2>
+            <textarea id="commentInput" placeholder="Tulis komentar Anda di sini..." rows="4"></textarea>
+            <br>
+            <button id="submitComment">Kirim Komentar</button>
+            <div class="comment-section" id="commentSection"></div>
+        </div>
+    </div>
+	 <!-- Catatan Kaki di Body Blog -->
+    <div class="footer-notes">
+        <div class="note-text">Catatan Kaki: Terima kasih telah membaca!</div>
+        <div class="blinking-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+
+   <!-- Highlight Section di Footer -->
+    <div class="highlight-section">
+        <h2>ADA YANG BARU DI BLOG<span class="new-label">New</span></h2>
+        <div class="highlight-posts">
+            <div class="highlight-card">
+                <img src="image1.jpg" alt="Highlight Image 1">
+                <h3>Selamat Datang di Blog Farid Ardiansyah<span class="new-label">New</span></h3>
+                <p>Siapa yang tidak tau saya?.</p>
+                <div class="tags">
+					<a href="utamablog1.html?tag=Kenalan" class="tag-link">Kenalan</a>
+        <a href="utamablog1.html?tag=SiapaSaya" class="tag-link">Siapa Saya?</a>
+                </div>
+            </div>
+			<div class="highlight-card">
+                <img src="image2.jpg" alt="Highlight Image 2">
+                <h3>Coming Soon<span class="new-label">New</span></h3>
+                <p>Coming Soon</p>
+                <div class="tags">
+				<a href="utamablog1.html?tag=ComingSoon" class="tag-link">Coming Soon</a>
+        <a href="utamablog1.html?tag=ComingSoon" class="tag-link">Coming Soon</a>
+            </div>
+			</div>
+            <div class="highlight-card">
+                <img src="image3.jpg" alt="Highlight Image 3">
+                <h3>Coming Soon<span class="new-label">New</span></h3>
+                <p>Coming Soon</p>
+                <div class="tags">
+                <a href="utamablog1.html?tag=ComingSoon" class="tag-link">Coming Soon</a>
+        <a href="utamablog1.html?tag=ComingSoon" class="tag-link">Coming Soon</a>
+            </div>
+			</div>
+            <div class="highlight-card">
+                <img src="image4.jpg" alt="Highlight Image 4">
+                <h3>Coming Soon<span class="new-label">New</span></h3>
+                <p>Coming Soon</p>
+                <div class="tags">
+                   <a href="utamablog1.html?tag=ComingSoon" class="tag-link">Coming Soon</a>
+        <a href="utamablog1.html?tag=ComingSoon" class="tag-link">Coming Soon</a>
+                </div>
+            </div>
+        </div>
+		</div>
+		
+
+	
+
+ <footer class="footer">
+        <div class="left">
+            Farid Ardiansyah
+        </div>
+        <div class="right">
+            <a href="utamablog1.html">BLOG</a> <a href="11.html">LOG PROBLEM</a>  <a href="page2.html">AKTIVITAS</a> <a href=".html">FORUM</a>  <a href=".html">MEDIA</a>
+        </div>
+    </footer>
+
+    <!-- Notifikasi Iklan -->
+    <div class="ad-notification" id="adNotification">
+        🎉 Selamat datang di Blog 1 Farid Ardiansyah!
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5pDbvvA65DqRHIY4EA_4BAr1jsQffmpg",
+            authDomain: "wowo-48903.firebaseapp.com",
+            databaseURL: "https://wowo-48903-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "wowo-48903",
+            storageBucket: "wowo-48903.appspot.com",
+            messagingSenderId: "70786358791",
+            appId: "1:70786358791:web:9ca6a8c3d46ead330714a2",
+            measurementId: "G-80KRHNMWJQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const commentRef = ref(database, "comments");
+
+        // Daftar kata-kata yang tidak pantas
+        const bannedWords = ["jelek", "goblog", "dongo", "bego", "goblog", "anjing", "babi", "monyet", "sok pintar", "ribut", "gabisa apa2", "so2an ngoding", "ga guna", "nganggur", "pengangguran", "miskin", "bodoh", "tablo", "ganteng", "jelek"]; // Ganti dengan kata-kata tidak pantas
+
+        // Fungsi untuk memfilter kata-kata tidak pantas
+        const filterText = (text) => {
+            let filteredText = text;
+            bannedWords.forEach((word) => {
+                const regex = new RegExp(`\\b${word}\\b`, "gi"); // Regex untuk mencocokkan kata secara case-insensitive
+                filteredText = filteredText.replace(regex, "*".repeat(word.length));
+            });
+            return filteredText;
+        };
+
+        const addComment = (author, text, parentId = null) => {
+            const filteredText = filterText(text); // Filter komentar sebelum disimpan
+            push(commentRef, { author, text: filteredText, parentId, timestamp: Date.now() });
+        };
+		const addCommentToDOM = (id, author, text, timestamp, parentId = null) => {
+            const commentSection = document.getElementById("commentSection");
+            const formattedTime = new Date(timestamp).toLocaleString("id-ID", {
+                weekday: "short",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            });
+
+            const filteredText = filterText(text); // Filter komentar sebelum ditampilkan
+
+            const commentDiv = document.createElement("div");
+            commentDiv.className = "comment";
+            commentDiv.setAttribute("data-id", id);
+            commentDiv.innerHTML = `
+                <div class="author">${author} - ${formattedTime}</div>
+                <div class="text">${filteredText}</div>
+                <button class="reply-btn">Balas</button>
+                <div class="replies"></div>
+            `;
+
+            if (parentId) {
+                const parentComment = document.querySelector(`[data-id='${parentId}'] .replies`);
+                parentComment.appendChild(commentDiv);
+            } else {
+                commentSection.appendChild(commentDiv);
+            }
+
+            const replyBtn = commentDiv.querySelector(".reply-btn");
+            replyBtn.addEventListener("click", () => {
+                const replyInput = document.createElement("textarea");
+                replyInput.placeholder = "Tulis balasan Anda...";
+                replyInput.rows = 2;
+                const sendReplyBtn = document.createElement("button");
+                sendReplyBtn.textContent = "Kirim Balasan";
+
+                commentDiv.appendChild(replyInput);
+                commentDiv.appendChild(sendReplyBtn);
+
+                sendReplyBtn.addEventListener("click", () => {
+                    const replyText = replyInput.value.trim();
+                    if (replyText) {
+                        const filteredReplyText = filterText(replyText);
+                        addComment("Pengguna", filteredReplyText, id);
+                        replyInput.remove();
+                        sendReplyBtn.remove();
+                    }
+                });
+            });
+        };
+		document.getElementById("submitComment").addEventListener("click", () => {
+            const commentInput = document.getElementById("commentInput");
+            const text = commentInput.value.trim();
+            if (text) {
+                addComment("Pengguna", text);
+                commentInput.value = "";
+            }
+        });
+
+        onChildAdded(commentRef, (data) => {
+            const comment = data.val();
+            addCommentToDOM(data.key, comment.author, comment.text, comment.timestamp, comment.parentId);
+        });
+		
+	
+         // Fungsi untuk mengarahkan ke halaman utama dengan filter tag
+        function filterPostsByTag(tag) {
+            window.location.href = `utamablog1.html?tag=${tag}`;
+        }
+		
+	// Ambil parameter dari URL
+const urlParams = new URLSearchParams(window.location.search);
+const selectedTag = urlParams.get("tag");
+
+// Filter post berdasarkan tag
+if (selectedTag) {
+    const posts = document.querySelectorAll(".blog-post");
+    posts.forEach(post => {
+        const postTags = post.dataset.tags.split(","); // Misal: "Kenalan,SiapaSaya"
+        if (!postTags.includes(selectedTag)) {
+            post.style.display = "none"; // Sembunyikan post yang tidak sesuai
+        }
+    });
+}
+
+    // Event listener untuk pencarian teks (opsional jika diperlukan)
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const posts = document.querySelectorAll('.blog-post, .highlight-card');
+
+        // Filter berdasarkan teks input
+        posts.forEach(post => {
+            const title = post.querySelector('h2, h3')?.textContent.toLowerCase() || '';
+            const content = post.querySelector('p')?.textContent.toLowerCase() || '';
+            if (title.includes(searchTerm) || content.includes(searchTerm)) {
+                post.style.display = 'flex'; // Tampilkan
+            } else {
+                post.style.display = 'none'; // Sembunyikan
+            }
+        });
+
+        // Tampilkan pesan pencarian
+        const searchResult = document.getElementById('searchResult');
+        searchResult.textContent = searchTerm
+            ? `Menampilkan hasil pencarian untuk: "${searchTerm}"`
+            : 'Tidak ada pencarian aktif.';
+    });
+
+        // Fungsi untuk menampilkan notifikasi iklan
+        const adNotification = document.getElementById('adNotification');
+        setTimeout(() => {
+            adNotification.style.display = 'none';
+        }, 5000); // Notifikasi hilang setelah 5 detik
+		
+ document.getElementById("searchInput").addEventListener("input", function () {
+        const searchQuery = this.value.toLowerCase();
+        const resultContainer = document.getElementById("searchResult");
+        const content = document.body.innerText.toLowerCase();
+        
+        // Hapus hasil pencarian sebelumnya
+        resultContainer.innerHTML = "";
+
+        if (searchQuery && content.includes(searchQuery)) {
+            // Blok warna dan pesan pencarian
+            const block = document.createElement("div");
+            block.style.backgroundColor = "#007BFF";
+            block.style.padding = "10px";
+            block.style.color = "white";
+            block.style.marginTop = "10px";
+            block.style.borderRadius = "5px";
+            block.textContent = `Hasil ditemukan: "${searchQuery}"`;
+
+            resultContainer.appendChild(block);
+        } else if (searchQuery) {
+            resultContainer.textContent = "Tidak ada hasil yang ditemukan.";
+        }
+    });
+	
+    </script>
+</body>
+</html>
